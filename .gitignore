@@ -1,0 +1,27 @@
+﻿# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+
+# Ambiente
+.env
+*.env.local
+
+# Dados e modelos
+*.pkl
+*.h5
+*.pt
+*.onnx
+data/raw/
+data/processed/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# IDEs
+.vscode/
+.idea/
+
+# Docker
+*.log
