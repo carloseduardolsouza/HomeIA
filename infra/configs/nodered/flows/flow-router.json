@@ -1,0 +1,45 @@
+[
+  {
+    "id": "tab-router",
+    "type": "tab",
+    "label": "Router",
+    "disabled": false,
+    "info": "Roteia mensagens por bucket"
+  },
+  {
+    "id": "mqtt-in-router",
+    "type": "mqtt in",
+    "z": "tab-router",
+    "name": "All Topics",
+    "topic": "#",
+    "qos": "0",
+    "datatype": "json",
+    "broker": "broker-homeia",
+    "x": 150,
+    "y": 140,
+    "wires": [["fn-router"]]
+  },
+  {
+    "id": "fn-router",
+    "type": "function",
+    "z": "tab-router",
+    "name": "Select Bucket",
+    "func": "const t = msg.topic || '';\\nif (t.startsWith('casa/energia/')) msg.bucket = 'energia';\\nelse if (t.startsWith('jardim/')) msg.bucket = 'irrigacao';\\nelse msg.bucket = 'default';\\nreturn msg;",
+    "outputs": 1,
+    "x": 370,
+    "y": 140,
+    "wires": [["debug-router"]]
+  },
+  {
+    "id": "debug-router",
+    "type": "debug",
+    "z": "tab-router",
+    "name": "Router output",
+    "active": true,
+    "tosidebar": true,
+    "complete": "true",
+    "x": 600,
+    "y": 140,
+    "wires": []
+  }
+]

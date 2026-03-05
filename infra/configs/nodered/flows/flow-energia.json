@@ -1,0 +1,34 @@
+[
+  {
+    "id": "tab-energia",
+    "type": "tab",
+    "label": "Energia",
+    "disabled": false,
+    "info": "Flow de energia"
+  },
+  {
+    "id": "mqtt-in-energia",
+    "type": "mqtt in",
+    "z": "tab-energia",
+    "name": "Energia MQTT",
+    "topic": "casa/energia/#",
+    "qos": "0",
+    "datatype": "json",
+    "broker": "broker-homeia",
+    "x": 180,
+    "y": 120,
+    "wires": [["debug-energia"]]
+  },
+  {
+    "id": "debug-energia",
+    "type": "debug",
+    "z": "tab-energia",
+    "name": "Energia->Influx placeholder",
+    "active": true,
+    "tosidebar": true,
+    "complete": "payload",
+    "x": 460,
+    "y": 120,
+    "wires": []
+  }
+]

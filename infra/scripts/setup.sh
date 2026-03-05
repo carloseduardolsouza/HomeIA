@@ -21,7 +21,7 @@ while [ $SECONDS -lt $end ]; do
   healthy_count=$(docker compose -f infra/compose/docker-compose.dev.yml ps | grep -c "(healthy)" || true)
   unhealthy_count=$(docker compose -f infra/compose/docker-compose.dev.yml ps | grep -c "unhealthy" || true)
 
-  if [ "$healthy_count" -ge 9 ]; then
+  if [ "$healthy_count" -ge 10 ]; then
     break
   fi
 
@@ -33,7 +33,7 @@ while [ $SECONDS -lt $end ]; do
   sleep 5
 done
 
-if [ "$healthy_count" -lt 9 ]; then
+if [ "$healthy_count" -lt 10 ]; then
   echo "Timeout aguardando todos os servicos saudaveis."
   docker compose -f infra/compose/docker-compose.dev.yml ps
   exit 1
@@ -46,6 +46,7 @@ echo "Infraestrutura pronta"
 echo "Grafana:    http://localhost:${GRAFANA_PORT:-3000}"
 echo "InfluxDB:   http://localhost:${INFLUXDB_PORT:-8086}"
 echo "Node-RED:   http://localhost:${NODERED_PORT:-1880}"
+echo "Gateway:    http://localhost:${GATEWAY_IOT_PORT:-8000}"
 echo "MLflow:     http://localhost:${MLFLOW_PORT:-5000}"
 echo "MinIO API:  http://localhost:${MINIO_API_PORT:-9000}"
 echo "MinIO UI:   http://localhost:${MINIO_CONSOLE_PORT:-9002}"

@@ -34,6 +34,7 @@ Use:
 | MinIO API     | `${MINIO_API_PORT}` (default 9000)                     | `MINIO_ROOT_USER` / `MINIO_ROOT_PASSWORD`       |
 | MinIO Console | `${MINIO_CONSOLE_PORT}` (default 9002)                 | `MINIO_ROOT_USER` / `MINIO_ROOT_PASSWORD`       |
 | Node-RED      | `${NODERED_PORT}` (default 1880)                       | sem auth (dev)                                  |
+| Gateway IoT   | `${GATEWAY_IOT_PORT}` (default 8000)                   | sem auth (dev)                                  |
 
 ## Troubleshooting
 

@@ -119,6 +119,10 @@ services:
       GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER}
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
       GF_USERS_ALLOW_SIGN_UP: "false"
+      INFLUXDB_URL: http://influxdb:8086
+      INFLUXDB_ORG: ${INFLUXDB_ORG}
+      INFLUXDB_TOKEN: ${INFLUXDB_TOKEN}
+      INFLUXDB_BUCKET: ${INFLUXDB_BUCKET}
     volumes:
       - grafana-data:/var/lib/grafana
       - ../configs/grafana/provisioning:/etc/grafana/provisioning:ro
@@ -230,6 +234,7 @@ services:
     volumes:
       - nodered-data:/data
       - ../configs/nodered/flows.json:/data/flows.json
+      - ../configs/nodered/flows:/data/flows-exported:ro
     networks:
       - ia-network
     restart: unless-stopped
@@ -245,3 +250,49 @@ services:
       timeout: 10s
       retries: 5
       start_period: 20s
+
+  gateway-iot:
+    build:
+      context: ../../services/gateway-iot
+      dockerfile: Dockerfile
+    container_name: ia-gateway-iot
+    environment:
+      MQTT_HOST: mosquitto
+      MQTT_PORT: 1883
+      MQTT_USER: ${MQTT_USER}
+      MQTT_PASSWORD: ${MQTT_PASSWORD}
+      INFLUXDB_URL: http://influxdb:8086
+      INFLUXDB_TOKEN: ${INFLUXDB_TOKEN}
+      INFLUXDB_ORG: ${INFLUXDB_ORG}
+      INFLUXDB_BUCKET: ${INFLUXDB_BUCKET}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      MQTT_ENABLED: "true"
+      INFLUXDB_ENABLED: "true"
+      POSTGRES_ENABLED: "false"
+      DISABLE_MQTT: "false"
+    ports:
+      - "${GATEWAY_IOT_PORT:-8000}:8000"
+    depends_on:
+      mosquitto:
+        condition: service_healthy
+      influxdb:
+        condition: service_healthy
+    networks:
+      - ia-network
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health', timeout=5)",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 25s

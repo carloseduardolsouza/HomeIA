@@ -1,0 +1,124 @@
+{
+  "id": null,
+  "uid": "energia-tempo-real",
+  "title": "Energia - Tempo Real",
+  "tags": ["energia", "m01"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "5s",
+  "time": { "from": "now-24h", "to": "now" },
+  "templating": {
+    "list": [
+      {
+        "name": "medidor_id",
+        "type": "query",
+        "label": "Medidor",
+        "datasource": { "type": "influxdb", "uid": "influxdb" },
+        "query": "import \"influxdata/influxdb/schema\"\nschema.tagValues(bucket: \"sensores\", tag: \"medidor_id\")",
+        "refresh": 2,
+        "includeAll": true,
+        "multi": false,
+        "current": { "selected": true, "text": "All", "value": "$__all" }
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "gauge",
+      "title": "Potencia Atual (W)",
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "gridPos": { "h": 8, "w": 6, "x": 0, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "watt",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 1500 },
+              { "color": "red", "value": 3000 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "query": "from(bucket: \"sensores\")\n  |> range(start: -5m)\n  |> filter(fn: (r) => r._measurement == \"energia_consumo\" and r._field == \"potencia_w\")\n  |> filter(fn: (r) => if \"$medidor_id\" == \"$__all\" then true else r.medidor_id == \"$medidor_id\")\n  |> last()",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "Potencia nas Ultimas 24h",
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "gridPos": { "h": 8, "w": 18, "x": 6, "y": 0 },
+      "fieldConfig": { "defaults": { "unit": "watt" }, "overrides": [] },
+      "targets": [
+        {
+          "query": "from(bucket: \"sensores\")\n  |> range(start: -24h)\n  |> filter(fn: (r) => r._measurement == \"energia_consumo\" and r._field == \"potencia_w\")\n  |> filter(fn: (r) => if \"$medidor_id\" == \"$__all\" then true else r.medidor_id == \"$medidor_id\")\n  |> aggregateWindow(every: 1m, fn: mean, createEmpty: false)",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Consumo Total do Dia (kWh)",
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "gridPos": { "h": 6, "w": 6, "x": 0, "y": 8 },
+      "fieldConfig": { "defaults": { "unit": "kwatth" }, "overrides": [] },
+      "targets": [
+        {
+          "query": "from(bucket: \"sensores\")\n  |> range(start: today())\n  |> filter(fn: (r) => r._measurement == \"energia_consumo\" and r._field == \"energia_kwh\")\n  |> filter(fn: (r) => if \"$medidor_id\" == \"$__all\" then true else r.medidor_id == \"$medidor_id\")\n  |> last()",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Custo Estimado do Dia (R$)",
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "gridPos": { "h": 6, "w": 6, "x": 6, "y": 8 },
+      "fieldConfig": { "defaults": { "unit": "currencyBRL" }, "overrides": [] },
+      "targets": [
+        {
+          "query": "from(bucket: \"sensores\")\n  |> range(start: today())\n  |> filter(fn: (r) => r._measurement == \"energia_consumo\" and r._field == \"energia_kwh\")\n  |> filter(fn: (r) => if \"$medidor_id\" == \"$__all\" then true else r.medidor_id == \"$medidor_id\")\n  |> last()\n  |> map(fn: (r) => ({ r with _value: r._value * 0.95 }))",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "barchart",
+      "title": "Consumo por Hora (ultimas 24h)",
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 8 },
+      "fieldConfig": { "defaults": { "unit": "kwatth" }, "overrides": [] },
+      "targets": [
+        {
+          "query": "from(bucket: \"sensores\")\n  |> range(start: -24h)\n  |> filter(fn: (r) => r._measurement == \"energia_consumo\" and r._field == \"energia_kwh\")\n  |> filter(fn: (r) => if \"$medidor_id\" == \"$__all\" then true else r.medidor_id == \"$medidor_id\")\n  |> aggregateWindow(every: 1h, fn: max, createEmpty: false)",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "table",
+      "title": "Ultimas 20 Leituras Brutas",
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 14 },
+      "targets": [
+        {
+          "query": "from(bucket: \"sensores\")\n  |> range(start: -30m)\n  |> filter(fn: (r) => r._measurement == \"energia_consumo\")\n  |> filter(fn: (r) => if \"$medidor_id\" == \"$__all\" then true else r.medidor_id == \"$medidor_id\")\n  |> sort(columns: [\"_time\"], desc: true)\n  |> limit(n: 20)",
+          "refId": "A"
+        }
+      ]
+    }
+  ]
+}

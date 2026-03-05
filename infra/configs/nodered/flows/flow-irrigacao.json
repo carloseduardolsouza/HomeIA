@@ -1,0 +1,34 @@
+[
+  {
+    "id": "tab-irrigacao",
+    "type": "tab",
+    "label": "Irrigacao",
+    "disabled": false,
+    "info": "Flow de irrigacao"
+  },
+  {
+    "id": "mqtt-in-irrigacao",
+    "type": "mqtt in",
+    "z": "tab-irrigacao",
+    "name": "Jardim MQTT",
+    "topic": "jardim/#",
+    "qos": "0",
+    "datatype": "json",
+    "broker": "broker-homeia",
+    "x": 170,
+    "y": 120,
+    "wires": [["debug-irrigacao"]]
+  },
+  {
+    "id": "debug-irrigacao",
+    "type": "debug",
+    "z": "tab-irrigacao",
+    "name": "Irrigacao->Influx placeholder",
+    "active": true,
+    "tosidebar": true,
+    "complete": "payload",
+    "x": 450,
+    "y": 120,
+    "wires": []
+  }
+]
