@@ -1,0 +1,10 @@
+energia:
+  anomalia:
+    threshold_score: -0.3
+    cooldown_minutos: 15
+    severidade: CRITICO
+  pico:
+    threshold_percentual: 150
+    janela_minutos: 60
+    cooldown_minutos: 15
+    severidade: AVISO
