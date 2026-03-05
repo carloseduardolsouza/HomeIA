@@ -296,3 +296,34 @@ services:
       timeout: 10s
       retries: 5
       start_period: 25s
+
+  irrigation-service:
+    build:
+      context: ../../services/irrigation-service
+      dockerfile: Dockerfile
+    container_name: ia-irrigation-service
+    environment:
+      MQTT_HOST: mosquitto
+      MQTT_PORT: 1883
+      MQTT_USER: ${MQTT_USER}
+      MQTT_PASSWORD: ${MQTT_PASSWORD}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      OPENWEATHER_API_KEY: ${OPENWEATHER_API_KEY}
+      OPENWEATHER_CITY: ${OPENWEATHER_CITY}
+      IRRIGATION_INTERVAL_MIN: ${IRRIGATION_INTERVAL_MIN}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    depends_on:
+      mosquitto:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    networks:
+      - ia-network
+    restart: unless-stopped

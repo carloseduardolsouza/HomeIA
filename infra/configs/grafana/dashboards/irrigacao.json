@@ -1,0 +1,92 @@
+{
+  "id": null,
+  "uid": "irrigacao",
+  "title": "Irrigacao",
+  "tags": ["m03", "irrigacao"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "panels": [
+    {
+      "id": 1,
+      "type": "gauge",
+      "title": "Umidade Atual por Zona",
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "gridPos": { "h": 7, "w": 6, "x": 0, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "yellow", "value": 40 },
+              { "color": "green", "value": 60 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "query": "from(bucket: \"sensores\")\n  |> range(start: -2h)\n  |> filter(fn: (r) => r._field == \"umidade_pct\")\n  |> last()",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "Historico de Umidade (7 dias)",
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "gridPos": { "h": 7, "w": 18, "x": 6, "y": 0 },
+      "fieldConfig": { "defaults": { "unit": "percent" }, "overrides": [] },
+      "targets": [
+        {
+          "query": "from(bucket: \"sensores\")\n  |> range(start: -7d)\n  |> filter(fn: (r) => r._field == \"umidade_pct\")\n  |> aggregateWindow(every: 30m, fn: mean, createEmpty: false)",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Ultima Irrigacao (horario/duracao)",
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "gridPos": { "h": 6, "w": 8, "x": 0, "y": 7 },
+      "targets": [
+        {
+          "query": "from(bucket: \"sensores\")\n  |> range(start: -7d)\n  |> filter(fn: (r) => r._field == \"duracao_min\")\n  |> last()",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Status da Valvula",
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "gridPos": { "h": 6, "w": 8, "x": 8, "y": 7 },
+      "targets": [
+        {
+          "query": "from(bucket: \"sensores\")\n  |> range(start: -2h)\n  |> filter(fn: (r) => r._field == \"ativo\")\n  |> last()",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "table",
+      "title": "Ultimas 20 Irrigacoes",
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "gridPos": { "h": 6, "w": 8, "x": 16, "y": 7 },
+      "targets": [
+        {
+          "query": "from(bucket: \"sensores\")\n  |> range(start: -7d)\n  |> filter(fn: (r) => r._measurement == \"irrigacao_log\")\n  |> sort(columns: [\"_time\"], desc: true)\n  |> limit(n: 20)",
+          "refId": "A"
+        }
+      ]
+    }
+  ]
+}
