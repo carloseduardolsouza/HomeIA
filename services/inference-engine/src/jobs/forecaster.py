@@ -34,10 +34,15 @@ def run_forecast_job(
     mae = float((baseline["y"] - pred["yhat"]).abs().mean())
     mape = _mape(baseline["y"], pred["yhat"])
 
-    mlflow.set_tracking_uri(settings.mlflow_tracking_uri)
-    with mlflow.start_run(run_name="energia_forecast"):
-        mlflow.log_metric("mae", mae)
-        mlflow.log_metric("mape", mape)
-        mlflow.set_tag("modulo", "energia")
+    if settings.mlflow_enabled:
+        try:
+            mlflow.set_tracking_uri(settings.mlflow_tracking_uri)
+            with mlflow.start_run(run_name="energia_forecast"):
+                mlflow.log_metric("mae", mae)
+                mlflow.log_metric("mape", mape)
+                mlflow.set_tag("modulo", "energia")
+        except Exception:
+            # Keep the job resilient when MLflow is temporarily unavailable.
+            pass
 
     return forecast, {"mae": mae, "mape": mape}

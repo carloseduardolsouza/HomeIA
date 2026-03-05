@@ -15,6 +15,10 @@ def _env(name: str, default: str) -> str:
     return os.getenv(name, default)
 
 
+def _env_bool(name: str, default: str = "true") -> bool:
+    return _env(name, default).lower() == "true"
+
+
 @dataclass
 class Settings:
     influxdb_url: str = _env("INFLUXDB_URL", "http://localhost:8086")
@@ -23,6 +27,7 @@ class Settings:
     influxdb_bucket: str = _env("INFLUXDB_BUCKET", "sensores")
 
     mlflow_tracking_uri: str = _env("MLFLOW_TRACKING_URI", DEFAULT_MLFLOW_URI)
+    mlflow_enabled: bool = _env_bool("MLFLOW_ENABLED", "true")
 
     telegram_bot_token: str = _env("TELEGRAM_BOT_TOKEN", "")
     telegram_chat_id: str = _env("TELEGRAM_CHAT_ID", "")

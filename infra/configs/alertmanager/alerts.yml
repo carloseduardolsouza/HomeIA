@@ -1,0 +1,27 @@
+groups:
+  - name: servidor
+    rules:
+      - alert: CPUAlto
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "CPU acima de 80% por 5 minutos"
+
+      - alert: MemoriaCritica
+        expr: ((node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes) * 100 > 90
+        for: 2m
+        labels:
+          severity: critical
+
+      - alert: DiscoQuaseCheio
+        expr: (node_filesystem_size_bytes{fstype!~"tmpfs|overlay"} - node_filesystem_free_bytes{fstype!~"tmpfs|overlay"}) / node_filesystem_size_bytes{fstype!~"tmpfs|overlay"} * 100 > 85
+        labels:
+          severity: warning
+
+      - alert: ServicoDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical

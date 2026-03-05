@@ -1,0 +1,85 @@
+{
+  "id": null,
+  "uid": "servidor-saude",
+  "title": "Servidor - Saude",
+  "tags": ["m05", "servidor"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "15s",
+  "panels": [
+    {
+      "id": 1,
+      "type": "timeseries",
+      "title": "CPU por Core",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "expr": "100 - (avg by (cpu) (irate(node_cpu_seconds_total{mode='idle'}[5m])) * 100)",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "Memoria (uso/disponivel/cache)",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "targets": [
+        {
+          "expr": "node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes",
+          "refId": "A"
+        },
+        { "expr": "node_memory_MemAvailable_bytes", "refId": "B" },
+        { "expr": "node_memory_Cached_bytes", "refId": "C" }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "gauge",
+      "title": "Disco por Particao",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 6, "w": 8, "x": 0, "y": 8 },
+      "targets": [
+        {
+          "expr": "100 * (node_filesystem_size_bytes{fstype!~'tmpfs|overlay'} - node_filesystem_free_bytes{fstype!~'tmpfs|overlay'}) / node_filesystem_size_bytes{fstype!~'tmpfs|overlay'}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Rede bytes TX/RX",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 6, "w": 8, "x": 8, "y": 8 },
+      "targets": [
+        { "expr": "rate(node_network_receive_bytes_total[5m])", "refId": "A" },
+        { "expr": "rate(node_network_transmit_bytes_total[5m])", "refId": "B" }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "Docker containers up/down",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 6, "w": 8, "x": 16, "y": 8 },
+      "targets": [{ "expr": "sum(up)", "refId": "A" }]
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "Logs por nivel (24h)",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 14 },
+      "targets": [
+        {
+          "expr": "sum by (job) (rate(logparser_grok_patterns_matched_total[5m]))",
+          "refId": "A"
+        }
+      ]
+    }
+  ]
+}

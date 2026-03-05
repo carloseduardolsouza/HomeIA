@@ -64,13 +64,19 @@ def run_anomaly_job(
             alerter.send(msg)
             alerter.mark_sent(key, now=now_ref)
 
-    mlflow.set_tracking_uri(settings.mlflow_tracking_uri)
-    with mlflow.start_run(run_name="energia_anomaly_detection"):
-        mlflow.log_param("contamination", detector.contamination)
-        mlflow.log_metric(
-            "anomalies_detected", sum(1 for d in decisions if d["is_anomaly"])
-        )
-        mlflow.set_tag("modulo", "energia")
-        mlflow.set_tag("versao_dados", now_ref.strftime("%Y-%m"))
+    if settings.mlflow_enabled:
+        try:
+            mlflow.set_tracking_uri(settings.mlflow_tracking_uri)
+            with mlflow.start_run(run_name="energia_anomaly_detection"):
+                mlflow.log_param("contamination", detector.contamination)
+                mlflow.log_metric(
+                    "anomalies_detected",
+                    sum(1 for d in decisions if d["is_anomaly"]),
+                )
+                mlflow.set_tag("modulo", "energia")
+                mlflow.set_tag("versao_dados", now_ref.strftime("%Y-%m"))
+        except Exception:
+            # Keep the job resilient when MLflow is temporarily unavailable.
+            pass
 
     return decisions

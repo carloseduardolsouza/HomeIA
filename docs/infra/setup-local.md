@@ -30,6 +30,8 @@ Use:
 | Redis         | `${REDIS_PORT}` (default 6379)                         | sem senha (dev)                                 |
 | Grafana       | `${GRAFANA_PORT}` (default 3000)                       | `GRAFANA_ADMIN_USER` / `GRAFANA_ADMIN_PASSWORD` |
 | Prometheus    | `${PROMETHEUS_PORT}` (default 9090)                    | sem auth (dev)                                  |
+| Alertmanager  | `${ALERTMANAGER_PORT}` (default 9093)                  | sem auth (dev)                                  |
+| Telegraf      | `${TELEGRAF_PORT}` (default 9273)                      | sem auth (dev)                                  |
 | MLflow        | `${MLFLOW_PORT}` (default 5000)                        | sem auth (dev)                                  |
 | MinIO API     | `${MINIO_API_PORT}` (default 9000)                     | `MINIO_ROOT_USER` / `MINIO_ROOT_PASSWORD`       |
 | MinIO Console | `${MINIO_CONSOLE_PORT}` (default 9002)                 | `MINIO_ROOT_USER` / `MINIO_ROOT_PASSWORD`       |
