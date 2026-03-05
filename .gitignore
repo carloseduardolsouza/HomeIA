@@ -25,3 +25,9 @@ data/processed/
 
 # Docker
 *.log
+
+# JavaScript
+node_modules/
+
+# Runtime infra data (local)
+infra/configs/mosquitto/data/*.db

@@ -1,6 +1,7 @@
 ﻿# Stack Tecnologica
 
 Resumo da stack principal:
+
 - Python (servicos de dados e ML)
 - FastAPI (APIs)
 - MQTT (mensageria IoT)

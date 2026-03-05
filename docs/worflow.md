@@ -1,4 +1,5 @@
 # 🚀 Plano de Entregas — IA Preditiva & Generativa
+
 > Baseado na Documentação Técnica v1.0 | Março 2026
 
 ---
@@ -20,24 +21,25 @@
 
 ## Convenções deste documento
 
-| Símbolo | Significado |
-|---|---|
-| ✅ | Critério de aceite obrigatório |
-| 📁 | Arquivo ou pasta a ser criado |
-| 📄 | Documento a ser entregue |
-| 🔧 | Configuração técnica obrigatória |
-| ⚠️ | Dependência ou restrição importante |
+| Símbolo | Significado                         |
+| ------- | ----------------------------------- |
+| ✅      | Critério de aceite obrigatório      |
+| 📁      | Arquivo ou pasta a ser criado       |
+| 📄      | Documento a ser entregue            |
+| 🔧      | Configuração técnica obrigatória    |
+| ⚠️      | Dependência ou restrição importante |
 
 ---
 
 ---
 
 ## Entrega 01
+
 # 📦 Setup do Repositório e Estrutura do Projeto
 
 **Fase:** 1 | **Sprint:** 1 | **Estimativa:** 3–5 dias  
 **Responsável:** Tech Lead / Arquiteto  
-**Módulos relacionados:** Todos  
+**Módulos relacionados:** Todos
 
 ### Objetivo
 
@@ -109,6 +111,7 @@ ia-preditiva-generativa/
 ### 1.2 Documentos Obrigatórios
 
 #### `README.md` deve conter:
+
 - Descrição do projeto em 3–5 linhas
 - Badges: build status, versão, licença
 - Pré-requisitos (Docker, Python 3.11+, Node 20+)
@@ -118,6 +121,7 @@ ia-preditiva-generativa/
 - Link para o board de tarefas (Jira / Linear / GitHub Projects)
 
 #### `.env.example` deve conter:
+
 ```env
 # === MQTT ===
 MQTT_HOST=localhost
@@ -155,6 +159,7 @@ OLLAMA_MODEL=llama3
 ```
 
 #### `CONTRIBUTING.md` deve conter:
+
 - Padrão de branches: `feature/`, `fix/`, `chore/`, `docs/`
 - Padrão de commits (Conventional Commits): `feat:`, `fix:`, `docs:`, `test:`
 - Como abrir Pull Request
@@ -166,6 +171,7 @@ OLLAMA_MODEL=llama3
 ### 1.3 Configurações de Código
 
 #### `.gitignore` deve incluir:
+
 ```
 # Python
 __pycache__/
@@ -197,6 +203,7 @@ data/processed/
 ```
 
 #### Configurar `pre-commit` com:
+
 - `black` — formatação Python
 - `flake8` — linting Python
 - `eslint` — linting JavaScript
@@ -207,28 +214,29 @@ data/processed/
 
 ### 1.4 Critérios de Aceite
 
-| # | Critério | Validação |
-|---|---|---|
-| ✅ 1 | Repositório criado com todas as pastas listadas | `ls` na raiz mostra estrutura completa |
-| ✅ 2 | `README.md` com todos os itens da seção 1.2 | Revisão manual |
-| ✅ 3 | `.env.example` com todas as variáveis documentadas | Revisão manual |
-| ✅ 4 | `.gitignore` configurado (sem `.env` real commitado) | `git status` limpo |
-| ✅ 5 | `pre-commit` instalado e funcionando | `pre-commit run --all-files` sem erros |
-| ✅ 6 | `CONTRIBUTING.md` com guia de branches e commits | Revisão manual |
-| ✅ 7 | Pelo menos 1 ADR criado (escolha do banco de dados) | Arquivo em `docs/adr/` |
-| ✅ 8 | Pipeline CI básico configurado (GitHub Actions / GitLab CI) | Push dispara lint e testes |
+| #    | Critério                                                    | Validação                              |
+| ---- | ----------------------------------------------------------- | -------------------------------------- |
+| ✅ 1 | Repositório criado com todas as pastas listadas             | `ls` na raiz mostra estrutura completa |
+| ✅ 2 | `README.md` com todos os itens da seção 1.2                 | Revisão manual                         |
+| ✅ 3 | `.env.example` com todas as variáveis documentadas          | Revisão manual                         |
+| ✅ 4 | `.gitignore` configurado (sem `.env` real commitado)        | `git status` limpo                     |
+| ✅ 5 | `pre-commit` instalado e funcionando                        | `pre-commit run --all-files` sem erros |
+| ✅ 6 | `CONTRIBUTING.md` com guia de branches e commits            | Revisão manual                         |
+| ✅ 7 | Pelo menos 1 ADR criado (escolha do banco de dados)         | Arquivo em `docs/adr/`                 |
+| ✅ 8 | Pipeline CI básico configurado (GitHub Actions / GitLab CI) | Push dispara lint e testes             |
 
 ---
 
 ---
 
 ## Entrega 02
+
 # 🐳 Infraestrutura Base com Docker
 
 **Fase:** 1 | **Sprint:** 1–2 | **Estimativa:** 5–7 dias  
 **Responsável:** DevOps / Backend  
 **Módulos relacionados:** Todos  
-**Dependência:** Entrega 01 concluída  
+**Dependência:** Entrega 01 concluída
 
 ### Objetivo
 
@@ -238,17 +246,17 @@ Levantar toda a infraestrutura de suporte do sistema usando Docker Compose: brok
 
 ### 2.1 Serviços a Serem Containerizados
 
-| Serviço | Imagem Docker | Porta | Propósito |
-|---|---|---|---|
-| Mosquitto (MQTT) | `eclipse-mosquitto:2` | 1883, 9001 | Broker de mensagens IoT |
-| InfluxDB | `influxdb:2.7` | 8086 | Time-series de sensores |
-| PostgreSQL | `postgres:16` | 5432 | Dados relacionais |
-| Redis | `redis:7-alpine` | 6379 | Cache e filas |
-| Grafana | `grafana/grafana:10` | 3000 | Dashboards |
-| Prometheus | `prom/prometheus:v2` | 9090 | Métricas dos serviços |
-| MLflow | `ghcr.io/mlflow/mlflow` | 5000 | Tracking de modelos |
-| MinIO | `minio/minio:latest` | 9000, 9001 | Armazenamento de objetos |
-| Node-RED | `nodered/node-red:3` | 1880 | Orquestração de fluxos IoT |
+| Serviço          | Imagem Docker           | Porta      | Propósito                  |
+| ---------------- | ----------------------- | ---------- | -------------------------- |
+| Mosquitto (MQTT) | `eclipse-mosquitto:2`   | 1883, 9001 | Broker de mensagens IoT    |
+| InfluxDB         | `influxdb:2.7`          | 8086       | Time-series de sensores    |
+| PostgreSQL       | `postgres:16`           | 5432       | Dados relacionais          |
+| Redis            | `redis:7-alpine`        | 6379       | Cache e filas              |
+| Grafana          | `grafana/grafana:10`    | 3000       | Dashboards                 |
+| Prometheus       | `prom/prometheus:v2`    | 9090       | Métricas dos serviços      |
+| MLflow           | `ghcr.io/mlflow/mlflow` | 5000       | Tracking de modelos        |
+| MinIO            | `minio/minio:latest`    | 9000, 9001 | Armazenamento de objetos   |
+| Node-RED         | `nodered/node-red:3`    | 1880       | Orquestração de fluxos IoT |
 
 ---
 
@@ -257,7 +265,7 @@ Levantar toda a infraestrutura de suporte do sistema usando Docker Compose: brok
 #### `infra/compose/docker-compose.dev.yml` — estrutura mínima:
 
 ```yaml
-version: '3.9'
+version: "3.9"
 
 networks:
   ia-network:
@@ -284,7 +292,8 @@ services:
     networks: [ia-network]
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "mosquitto_pub", "-h", "localhost", "-t", "health", "-m", "ok"]
+      test:
+        ["CMD", "mosquitto_pub", "-h", "localhost", "-t", "health", "-m", "ok"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -310,6 +319,7 @@ services:
 ```
 
 #### `infra/configs/mosquitto/mosquitto.conf`:
+
 ```
 listener 1883
 listener 9001
@@ -326,6 +336,7 @@ log_dest stdout
 ### 2.3 Scripts de Setup Obrigatórios
 
 #### `infra/scripts/setup.sh`:
+
 ```bash
 #!/bin/bash
 # Inicializa toda a infra local
@@ -371,6 +382,7 @@ Criar e exportar como JSON em `infra/configs/grafana/dashboards/`:
 ### 2.5 Documentação Obrigatória
 
 Criar `docs/infra/setup-local.md` com:
+
 - Pré-requisitos: versão do Docker, Docker Compose, recursos mínimos (RAM, disco)
 - Passo a passo de instalação do zero
 - Como verificar que cada serviço está saudável (`docker compose ps`)
@@ -382,28 +394,29 @@ Criar `docs/infra/setup-local.md` com:
 
 ### 2.6 Critérios de Aceite
 
-| # | Critério | Validação |
-|---|---|---|
-| ✅ 1 | Todos os 9 serviços sobem com `docker compose up -d` | `docker compose ps` mostra todos `healthy` |
-| ✅ 2 | Mosquitto aceita conexão MQTT com autenticação | `mosquitto_pub -u user -P pass -t test -m ok` |
-| ✅ 3 | InfluxDB acessível com token configurado | UI em `localhost:8086` acessível |
-| ✅ 4 | Grafana com 3 dashboards de infra pré-configurados | Dashboards visíveis na UI |
-| ✅ 5 | `setup.sh` sobe tudo em menos de 5 minutos | Execução cronometrada |
-| ✅ 6 | Todos os dados persistem após `docker compose restart` | Reiniciar e verificar dados |
-| ✅ 7 | `docs/infra/setup-local.md` completo | Alguém do time consegue rodar do zero seguindo o doc |
-| ✅ 8 | Health checks configurados em todos os serviços | `docker inspect` mostra health status |
+| #    | Critério                                               | Validação                                            |
+| ---- | ------------------------------------------------------ | ---------------------------------------------------- |
+| ✅ 1 | Todos os 9 serviços sobem com `docker compose up -d`   | `docker compose ps` mostra todos `healthy`           |
+| ✅ 2 | Mosquitto aceita conexão MQTT com autenticação         | `mosquitto_pub -u user -P pass -t test -m ok`        |
+| ✅ 3 | InfluxDB acessível com token configurado               | UI em `localhost:8086` acessível                     |
+| ✅ 4 | Grafana com 3 dashboards de infra pré-configurados     | Dashboards visíveis na UI                            |
+| ✅ 5 | `setup.sh` sobe tudo em menos de 5 minutos             | Execução cronometrada                                |
+| ✅ 6 | Todos os dados persistem após `docker compose restart` | Reiniciar e verificar dados                          |
+| ✅ 7 | `docs/infra/setup-local.md` completo                   | Alguém do time consegue rodar do zero seguindo o doc |
+| ✅ 8 | Health checks configurados em todos os serviços        | `docker inspect` mostra health status                |
 
 ---
 
 ---
 
 ## Entrega 03
+
 # 📡 Pipeline de Ingestão de Dados IoT
 
 **Fase:** 1–2 | **Sprint:** 2–3 | **Estimativa:** 7–10 dias  
 **Responsável:** Backend + Firmware  
 **Módulos relacionados:** M-01, M-02, M-03  
-**Dependência:** Entrega 02 concluída  
+**Dependência:** Entrega 02 concluída
 
 ### Objetivo
 
@@ -414,6 +427,7 @@ Criar o pipeline completo de coleta e ingestão de dados: firmware do ESP32 publ
 ### 3.1 Firmware ESP32 (`firmware/esp32-sensores/`)
 
 #### Estrutura do projeto PlatformIO:
+
 ```
 firmware/esp32-sensores/
 ├── platformio.ini
@@ -427,6 +441,7 @@ firmware/esp32-sensores/
 ```
 
 #### Tópicos MQTT a serem publicados:
+
 ```
 casa/energia/consumo      → {"watts": 1240.5, "volts": 220.1, "amperes": 5.64, "ts": 1709123456}
 casa/energia/disjuntor    → {"id": "disjuntor_01", "status": "closed", "ts": 1709123456}
@@ -440,6 +455,7 @@ casa/ambiente/temperatura → {"sensor_id": "amb_01", "temp_c": 24.1, "umidade_p
 ### 3.2 Serviço Gateway IoT (`services/gateway-iot/`)
 
 #### Estrutura de pastas:
+
 ```
 services/gateway-iot/
 ├── Dockerfile
@@ -462,6 +478,7 @@ services/gateway-iot/
 ```
 
 #### Regras de validação obrigatórias:
+
 - Rejeitar mensagens com `ts` mais de 60 segundos no passado ou futuro
 - Rejeitar leituras fora de faixa física (ex: `umidade > 100%`, `volts < 0`)
 - Logar erros de parsing sem derrubar o serviço
@@ -502,29 +519,30 @@ Documentação OpenAPI disponível em `/docs` (Swagger UI automático do FastAPI
 
 ### 3.6 Critérios de Aceite
 
-| # | Critério | Validação |
-|---|---|---|
-| ✅ 1 | ESP32 publica dados reais a cada 5s no broker MQTT | `mosquitto_sub -t "casa/#" -v` mostra dados |
-| ✅ 2 | Gateway consome todos os tópicos e persiste no InfluxDB | Query no InfluxDB retorna dados |
-| ✅ 3 | Dados inválidos são rejeitados e logados sem crash | Enviar payload inválido, checar logs |
-| ✅ 4 | Node-RED flow processando e roteando mensagens | Painel Node-RED mostra fluxo ativo |
-| ✅ 5 | API de ingestão HTTP funcionando com validação Pydantic | `POST /ingest/sensor` retorna 200 |
-| ✅ 6 | Métricas Prometheus expostas pelo gateway | `GET /metrics` retorna dados legíveis |
-| ✅ 7 | Testes unitários com cobertura ≥ 70% dos handlers | `pytest --cov` mostra cobertura |
-| ✅ 8 | Documentação de tópicos MQTT criada | `docs/data/topicos-mqtt.md` completo |
+| #    | Critério                                                | Validação                                   |
+| ---- | ------------------------------------------------------- | ------------------------------------------- |
+| ✅ 1 | ESP32 publica dados reais a cada 5s no broker MQTT      | `mosquitto_sub -t "casa/#" -v` mostra dados |
+| ✅ 2 | Gateway consome todos os tópicos e persiste no InfluxDB | Query no InfluxDB retorna dados             |
+| ✅ 3 | Dados inválidos são rejeitados e logados sem crash      | Enviar payload inválido, checar logs        |
+| ✅ 4 | Node-RED flow processando e roteando mensagens          | Painel Node-RED mostra fluxo ativo          |
+| ✅ 5 | API de ingestão HTTP funcionando com validação Pydantic | `POST /ingest/sensor` retorna 200           |
+| ✅ 6 | Métricas Prometheus expostas pelo gateway               | `GET /metrics` retorna dados legíveis       |
+| ✅ 7 | Testes unitários com cobertura ≥ 70% dos handlers       | `pytest --cov` mostra cobertura             |
+| ✅ 8 | Documentação de tópicos MQTT criada                     | `docs/data/topicos-mqtt.md` completo        |
 
 ---
 
 ---
 
 ## Entrega 04
+
 # ⚡ Módulo de Energia (M-01) — Coleta e Armazenamento
 
 **Fase:** 2 | **Sprint:** 3–4 | **Estimativa:** 5–7 dias  
 **Responsável:** Backend + Hardware  
 **Módulos relacionados:** M-01  
 **Requisitos cobertos:** RF-EN-01, RF-EN-05  
-**Dependência:** Entrega 03 concluída  
+**Dependência:** Entrega 03 concluída
 
 ### Objetivo
 
@@ -535,10 +553,12 @@ Implementar a coleta completa e confiável de dados do sensor de energia PZEM-00
 ### 4.1 Firmware (`firmware/esp32-energia/`)
 
 #### Grandezas coletadas a cada 5 segundos:
+
 - Tensão (V), Corrente (A), Potência ativa (W), Potência aparente (VA)
 - Fator de potência, Frequência (Hz), Energia acumulada (kWh)
 
 #### Tópico MQTT:
+
 ```
 casa/energia/medidor/{id_medidor}
 Payload: {
@@ -555,6 +575,7 @@ Payload: {
 ```
 
 #### Funcionalidades obrigatórias do firmware:
+
 - Reconexão automática ao WiFi e MQTT com backoff exponencial
 - Buffer local de 50 leituras caso a conexão caia (salvas na RAM/SPIFFS)
 - LED de status: verde = OK, amarelo = sem WiFi, vermelho = sem MQTT
@@ -584,6 +605,7 @@ Timestamp: unix nanoseconds
 ### 4.3 Dashboard Grafana (`infra/configs/grafana/dashboards/energia-tempo-real.json`)
 
 Painéis obrigatórios:
+
 - Gauge: Potência atual (W) com zonas verde/amarelo/vermelho
 - Gráfico de linha: Potência nas últimas 24h
 - Stat: Consumo total do dia (kWh)
@@ -602,27 +624,28 @@ Painéis obrigatórios:
 
 ### 4.5 Critérios de Aceite
 
-| # | Critério | Validação |
-|---|---|---|
-| ✅ 1 | PZEM-004T enviando 12 leituras por minuto ao InfluxDB | Query Flux conta registros por minuto |
-| ✅ 2 | Dashboard Grafana mostra consumo em tempo real (delay < 10s) | Observação visual |
-| ✅ 3 | Buffer local funciona: desconectar WiFi por 2min, reconectar e dados chegam | Teste manual |
-| ✅ 4 | Histórico de 30 dias armazenado sem gaps (retention policy configurada) | Checar configuração InfluxDB |
-| ✅ 5 | Dashboard com cálculo de custo usando tarifa configurável | Alterar tarifa e ver atualização |
-| ✅ 6 | `docs/modulos/m01-energia.md` completo | Revisão manual |
+| #    | Critério                                                                    | Validação                             |
+| ---- | --------------------------------------------------------------------------- | ------------------------------------- |
+| ✅ 1 | PZEM-004T enviando 12 leituras por minuto ao InfluxDB                       | Query Flux conta registros por minuto |
+| ✅ 2 | Dashboard Grafana mostra consumo em tempo real (delay < 10s)                | Observação visual                     |
+| ✅ 3 | Buffer local funciona: desconectar WiFi por 2min, reconectar e dados chegam | Teste manual                          |
+| ✅ 4 | Histórico de 30 dias armazenado sem gaps (retention policy configurada)     | Checar configuração InfluxDB          |
+| ✅ 5 | Dashboard com cálculo de custo usando tarifa configurável                   | Alterar tarifa e ver atualização      |
+| ✅ 6 | `docs/modulos/m01-energia.md` completo                                      | Revisão manual                        |
 
 ---
 
 ---
 
 ## Entrega 05
+
 # 🧠 Módulo de Energia (M-01) — Modelo Preditivo e Alertas
 
 **Fase:** 3 | **Sprint:** 4–6 | **Estimativa:** 10–14 dias  
 **Responsável:** Data Scientist + Backend  
 **Módulos relacionados:** M-01  
 **Requisitos cobertos:** RF-EN-02, RF-EN-03, RF-EN-04, RN-01, RN-05, RN-06, RN-07, RN-09  
-**Dependência:** Entrega 04 com 7+ dias de dados coletados  
+**Dependência:** Entrega 04 com 7+ dias de dados coletados
 
 ### Objetivo
 
@@ -675,6 +698,7 @@ Obrigatório criar e versionar:
 ### 5.3 Integração com MLflow
 
 Cada experimento de treino deve registrar:
+
 ```python
 mlflow.log_param("contamination", 0.05)         # hiperparâmetros
 mlflow.log_metric("anomaly_precision", 0.92)     # métricas
@@ -703,6 +727,7 @@ energia:
 ```
 
 #### Formato do alerta Telegram:
+
 ```
 ⚡ ALERTA DE ENERGIA — CRÍTICO
 
@@ -731,30 +756,31 @@ energia:
 
 ### 5.6 Critérios de Aceite
 
-| # | Critério | Validação |
-|---|---|---|
-| ✅ 1 | Isolation Forest detecta consumo anômalo injetado manualmente | Injetar dado anômalo, alerta chega em < 2min |
-| ✅ 2 | Alerta Telegram enviado com formato correto | Verificar mensagem no grupo |
-| ✅ 3 | Cooldown de 15min funcionando (RN-01) | Injetar 2 anomalias consecutivas, só 1 alerta |
-| ✅ 4 | Prophet prevê consumo das próximas 24h com MAPE < 20% | Checar notebook de validação |
-| ✅ 5 | Projeção de fatura mensal visível no dashboard Grafana | Painel "Estimativa Mensal" no dashboard |
-| ✅ 6 | Todos os experimentos versionados no MLflow | Interface MLflow mostra runs |
-| ✅ 7 | Toda decisão de alerta logada com timestamp, modelo e score (RN-07) | Checar logs estruturados |
-| ✅ 8 | Notebooks de treino executáveis do zero com dados reais | Executar notebook limpo |
-| ✅ 9 | Cobertura de testes ≥ 75% no inference-engine | `pytest --cov` |
+| #    | Critério                                                            | Validação                                     |
+| ---- | ------------------------------------------------------------------- | --------------------------------------------- |
+| ✅ 1 | Isolation Forest detecta consumo anômalo injetado manualmente       | Injetar dado anômalo, alerta chega em < 2min  |
+| ✅ 2 | Alerta Telegram enviado com formato correto                         | Verificar mensagem no grupo                   |
+| ✅ 3 | Cooldown de 15min funcionando (RN-01)                               | Injetar 2 anomalias consecutivas, só 1 alerta |
+| ✅ 4 | Prophet prevê consumo das próximas 24h com MAPE < 20%               | Checar notebook de validação                  |
+| ✅ 5 | Projeção de fatura mensal visível no dashboard Grafana              | Painel "Estimativa Mensal" no dashboard       |
+| ✅ 6 | Todos os experimentos versionados no MLflow                         | Interface MLflow mostra runs                  |
+| ✅ 7 | Toda decisão de alerta logada com timestamp, modelo e score (RN-07) | Checar logs estruturados                      |
+| ✅ 8 | Notebooks de treino executáveis do zero com dados reais             | Executar notebook limpo                       |
+| ✅ 9 | Cobertura de testes ≥ 75% no inference-engine                       | `pytest --cov`                                |
 
 ---
 
 ---
 
 ## Entrega 06
+
 # 💧 Módulo de Irrigação (M-03) — Sensores e Automação
 
 **Fase:** 2–3 | **Sprint:** 5–7 | **Estimativa:** 8–10 dias  
 **Responsável:** Backend + Hardware  
 **Módulos relacionados:** M-03  
 **Requisitos cobertos:** RF-IR-01 a RF-IR-05, RN-10 a RN-13  
-**Dependência:** Entrega 03 concluída  
+**Dependência:** Entrega 03 concluída
 
 ### Objetivo
 
@@ -765,10 +791,12 @@ Implementar leitura de umidade do solo, integração com API climática, modelo 
 ### 6.1 Firmware (`firmware/esp32-irrigacao/`)
 
 #### Sensores:
+
 - Capacitive Soil Moisture Sensor v1.2 (pino analógico)
 - DHT22 (temperatura e umidade do ar)
 
 #### Tópicos MQTT publicados:
+
 ```
 jardim/solo/{zona_id}/umidade       → {"zona": "A", "umidade_pct": 34.2, "ts": ...}
 jardim/solo/{zona_id}/temperatura   → {"zona": "A", "temp_c": 22.4, "ts": ...}
@@ -776,6 +804,7 @@ jardim/irrigacao/{zona_id}/status   → {"zona": "A", "ativo": false, "ts": ...}
 ```
 
 #### Tópico MQTT subscrito (para receber comandos):
+
 ```
 jardim/irrigacao/{zona_id}/comando
 Payload: {"acao": "ligar", "duracao_minutos": 12, "origem": "ia"}
@@ -842,29 +871,30 @@ class IrrigationRules:
 
 ### 6.6 Critérios de Aceite
 
-| # | Critério | Validação |
-|---|---|---|
-| ✅ 1 | Sensor de umidade lendo e publicando no MQTT a cada 10min | `mosquitto_sub -t "jardim/#"` |
-| ✅ 2 | Irrigação acionada automaticamente quando umidade < 40% | Forçar leitura baixa, relé aciona |
-| ✅ 3 | Irrigação bloqueada com chuva prevista > 5mm (RN-10) | Mockar API com chuva, verificar bloqueio |
-| ✅ 4 | Irrigação bloqueada fora do horário permitido (RN-11) | Testar fora de 05h-09h e 18h-21h |
-| ✅ 5 | Duração máxima de 60min respeitada (RN-12) | Checar código e log |
-| ✅ 6 | Intervalo mínimo de 4h entre sessões (RN-13) | Log mostra intervalo respeitado |
-| ✅ 7 | Cancelamento manual via MQTT funciona | Publicar `{"acao": "desligar"}` |
-| ✅ 8 | Log completo de todas as irrigações no PostgreSQL | Query na tabela `irrigacao_log` |
+| #    | Critério                                                  | Validação                                |
+| ---- | --------------------------------------------------------- | ---------------------------------------- |
+| ✅ 1 | Sensor de umidade lendo e publicando no MQTT a cada 10min | `mosquitto_sub -t "jardim/#"`            |
+| ✅ 2 | Irrigação acionada automaticamente quando umidade < 40%   | Forçar leitura baixa, relé aciona        |
+| ✅ 3 | Irrigação bloqueada com chuva prevista > 5mm (RN-10)      | Mockar API com chuva, verificar bloqueio |
+| ✅ 4 | Irrigação bloqueada fora do horário permitido (RN-11)     | Testar fora de 05h-09h e 18h-21h         |
+| ✅ 5 | Duração máxima de 60min respeitada (RN-12)                | Checar código e log                      |
+| ✅ 6 | Intervalo mínimo de 4h entre sessões (RN-13)              | Log mostra intervalo respeitado          |
+| ✅ 7 | Cancelamento manual via MQTT funciona                     | Publicar `{"acao": "desligar"}`          |
+| ✅ 8 | Log completo de todas as irrigações no PostgreSQL         | Query na tabela `irrigacao_log`          |
 
 ---
 
 ---
 
 ## Entrega 07
+
 # 🖥️ Módulo de Servidor (M-05) — Monitoramento e Alertas
 
 **Fase:** 2–3 | **Sprint:** 5–6 | **Estimativa:** 6–8 dias  
 **Responsável:** DevOps + Backend  
 **Módulos relacionados:** M-05  
 **Requisitos cobertos:** RF-SV-01 a RF-SV-04, RNF-05, RNF-06  
-**Dependência:** Entrega 02 concluída  
+**Dependência:** Entrega 02 concluída
 
 ### Objetivo
 
@@ -875,6 +905,7 @@ Implementar coleta completa de métricas do servidor com Telegraf + Prometheus, 
 ### 7.1 Configuração Telegraf (`infra/configs/telegraf/telegraf.conf`)
 
 Plugins de entrada obrigatórios:
+
 ```toml
 [[inputs.cpu]]
   percpu = true
@@ -907,6 +938,7 @@ Plugins de entrada obrigatórios:
 ### 7.2 Alertas AlertManager (`infra/configs/alertmanager/alerts.yml`)
 
 Alertas a configurar:
+
 ```yaml
 groups:
   - name: servidor
@@ -952,6 +984,7 @@ groups:
 ### 7.4 Dashboard Grafana (`infra/configs/grafana/dashboards/servidor-saude.json`)
 
 Painéis obrigatórios:
+
 - CPU: uso por core (gráfico de área)
 - Memória: uso, disponível, cache (gráfico empilhado)
 - Disco: uso por partição (gauge)
@@ -971,28 +1004,29 @@ Painéis obrigatórios:
 
 ### 7.6 Critérios de Aceite
 
-| # | Critério | Validação |
-|---|---|---|
-| ✅ 1 | Telegraf coletando todas as métricas a cada 15s | Query no InfluxDB mostra dados |
-| ✅ 2 | Dashboard Grafana com todos os painéis funcionando | Revisão visual |
-| ✅ 3 | Alerta de CPU dispara quando uso > 80% por 5min | `stress --cpu 8 --timeout 360` |
-| ✅ 4 | Alerta de serviço down chega em < 2min | Derrubar um container, checar Telegram |
-| ✅ 5 | Análise de log classifica erros com acurácia ≥ 85% | Avaliar no conjunto de teste |
-| ✅ 6 | Relatório diário de logs enviado às 08h | Checar Telegram no dia seguinte |
-| ✅ 7 | Runbooks criados para os 2 alertas mais comuns | Arquivos em `docs/runbooks/` |
+| #    | Critério                                           | Validação                              |
+| ---- | -------------------------------------------------- | -------------------------------------- |
+| ✅ 1 | Telegraf coletando todas as métricas a cada 15s    | Query no InfluxDB mostra dados         |
+| ✅ 2 | Dashboard Grafana com todos os painéis funcionando | Revisão visual                         |
+| ✅ 3 | Alerta de CPU dispara quando uso > 80% por 5min    | `stress --cpu 8 --timeout 360`         |
+| ✅ 4 | Alerta de serviço down chega em < 2min             | Derrubar um container, checar Telegram |
+| ✅ 5 | Análise de log classifica erros com acurácia ≥ 85% | Avaliar no conjunto de teste           |
+| ✅ 6 | Relatório diário de logs enviado às 08h            | Checar Telegram no dia seguinte        |
+| ✅ 7 | Runbooks criados para os 2 alertas mais comuns     | Arquivos em `docs/runbooks/`           |
 
 ---
 
 ---
 
 ## Entrega 08
+
 # 🔧 Módulo de Equipamentos (M-02) — Detecção de Anomalia por Equipamento
 
 **Fase:** 3 | **Sprint:** 6–8 | **Estimativa:** 8–10 dias  
 **Responsável:** Data Scientist + Backend  
 **Módulos relacionados:** M-02  
 **Requisitos cobertos:** RF-EQ-01 a RF-EQ-04, RN-05 a RN-07  
-**Dependência:** Entrega 05 (reaproveitamento do inference-engine)  
+**Dependência:** Entrega 05 (reaproveitamento do inference-engine)
 
 ### Objetivo
 
@@ -1039,6 +1073,7 @@ CREATE TABLE equipamento_baseline (
 ### 8.3 Detector de Anomalia por Equipamento
 
 Algoritmo Z-Score:
+
 ```python
 def detectar_anomalia_equipamento(
     leitura_atual_w: float,
@@ -1074,28 +1109,29 @@ GET    /api/v1/equipamentos/{id}/alertas
 
 ### 8.6 Critérios de Aceite
 
-| # | Critério | Validação |
-|---|---|---|
-| ✅ 1 | Cadastro de equipamento via API retorna 201 com UUID | `POST /equipamentos` |
-| ✅ 2 | Baseline calculado após 7 dias de dados (RN-05) | Verificar tabela `equipamento_baseline` |
-| ✅ 3 | Anomalia detectada quando consumo > 30% acima do baseline | Simular consumo alto |
-| ✅ 4 | Alerta não disparado com confiança < 70% (RN-06) | Injetar dado limítrofe |
-| ✅ 5 | Toda anomalia logada com modelo, score e timestamp (RN-07) | Checar tabela de auditoria |
-| ✅ 6 | Relatorio semanal de saúde dos equipamentos gerado | Verificar relatório no Telegram |
-| ✅ 7 | API com documentação OpenAPI completa | Acessar `/docs` |
+| #    | Critério                                                   | Validação                               |
+| ---- | ---------------------------------------------------------- | --------------------------------------- |
+| ✅ 1 | Cadastro de equipamento via API retorna 201 com UUID       | `POST /equipamentos`                    |
+| ✅ 2 | Baseline calculado após 7 dias de dados (RN-05)            | Verificar tabela `equipamento_baseline` |
+| ✅ 3 | Anomalia detectada quando consumo > 30% acima do baseline  | Simular consumo alto                    |
+| ✅ 4 | Alerta não disparado com confiança < 70% (RN-06)           | Injetar dado limítrofe                  |
+| ✅ 5 | Toda anomalia logada com modelo, score e timestamp (RN-07) | Checar tabela de auditoria              |
+| ✅ 6 | Relatorio semanal de saúde dos equipamentos gerado         | Verificar relatório no Telegram         |
+| ✅ 7 | API com documentação OpenAPI completa                      | Acessar `/docs`                         |
 
 ---
 
 ---
 
 ## Entrega 09
+
 # 🏠 Módulo de Casa Inteligente (M-04) — Home Assistant + LLM
 
 **Fase:** 4 | **Sprint:** 8–10 | **Estimativa:** 12–15 dias  
 **Responsável:** Backend + AI Engineer  
 **Módulos relacionados:** M-04  
 **Requisitos cobertos:** RF-CI-01 a RF-CI-04, RN-18, RN-19, RN-20  
-**Dependência:** Home Assistant configurado, Ollama rodando com LLaMA 3  
+**Dependência:** Home Assistant configurado, Ollama rodando com LLaMA 3
 
 ### Objetivo
 
@@ -1106,6 +1142,7 @@ Integrar o sistema ao Home Assistant para controle de dispositivos smart home, e
 ### 9.1 Configuração Home Assistant
 
 #### Arquivo `infra/configs/homeassistant/configuration.yaml`:
+
 ```yaml
 homeassistant:
   name: "IA Preditiva Casa"
@@ -1120,6 +1157,7 @@ api:
 ```
 
 #### Variáveis de ambiente necessárias:
+
 ```env
 HA_URL=http://homeassistant:8123
 HA_TOKEN=seu_token_longa_duracao
@@ -1197,6 +1235,7 @@ GET  /api/v1/chat/historico/{session_id}
 ### 9.5 Automação de Modo Ausente (RF-CI-04)
 
 Criar automação no Home Assistant que:
+
 1. Detecta ausência via sensores de presença Zigbee
 2. Aguarda 5 minutos de ausência confirmada
 3. Publica evento MQTT: `casa/presenca/modo`
@@ -1214,29 +1253,30 @@ Criar automação no Home Assistant que:
 
 ### 9.7 Critérios de Aceite
 
-| # | Critério | Validação |
-|---|---|---|
-| ✅ 1 | Comando "apaga a luz da sala" executa ação no Home Assistant | Testar com dispositivo real |
-| ✅ 2 | Confirmação solicitada para ações em 3+ dispositivos (RN-18) | Enviar "apaga tudo em casa" |
-| ✅ 3 | LLM roda 100% local, sem chamadas externas (RN-19) | Monitorar rede durante uso |
-| ✅ 4 | Histórico limitado a últimas 10 interações (RN-20) | Checar código de memory |
-| ✅ 5 | Modo ausente ativa automaticamente após 5min sem presença | Sair de casa e aguardar |
-| ✅ 6 | Resposta em < 5 segundos para comandos simples | Medir tempo de resposta |
-| ✅ 7 | API documentada com exemplos de uso | Acessar `/docs` |
-| ✅ 8 | Todos os comandos executados são logados (RN-07) | Checar tabela `llm_action_log` |
+| #    | Critério                                                     | Validação                      |
+| ---- | ------------------------------------------------------------ | ------------------------------ |
+| ✅ 1 | Comando "apaga a luz da sala" executa ação no Home Assistant | Testar com dispositivo real    |
+| ✅ 2 | Confirmação solicitada para ações em 3+ dispositivos (RN-18) | Enviar "apaga tudo em casa"    |
+| ✅ 3 | LLM roda 100% local, sem chamadas externas (RN-19)           | Monitorar rede durante uso     |
+| ✅ 4 | Histórico limitado a últimas 10 interações (RN-20)           | Checar código de memory        |
+| ✅ 5 | Modo ausente ativa automaticamente após 5min sem presença    | Sair de casa e aguardar        |
+| ✅ 6 | Resposta em < 5 segundos para comandos simples               | Medir tempo de resposta        |
+| ✅ 7 | API documentada com exemplos de uso                          | Acessar `/docs`                |
+| ✅ 8 | Todos os comandos executados são logados (RN-07)             | Checar tabela `llm_action_log` |
 
 ---
 
 ---
 
 ## Entrega 10
+
 # 📷 Módulo de Câmeras (M-06) — Visão Computacional
 
 **Fase:** 4 | **Sprint:** 9–11 | **Estimativa:** 10–14 dias  
 **Responsável:** AI Engineer + Backend  
 **Módulos relacionados:** M-06  
 **Requisitos cobertos:** RF-CA-01 a RF-CA-05, RN-14 a RN-17  
-**Dependência:** Entregas 02 e 03 concluídas, MinIO configurado  
+**Dependência:** Entregas 02 e 03 concluídas, MinIO configurado
 
 ### Objetivo
 
@@ -1364,6 +1404,7 @@ POST   /api/v1/eventos/{id}/falso-positivo  # RN-17: marcar para retreino
 ### 10.6 Política de Retenção de Snapshots (RN-15)
 
 Configurar job Celery diário:
+
 ```python
 # Executa às 03h
 # Remove snapshots com mais de 90 dias do MinIO
@@ -1382,17 +1423,17 @@ Configurar job Celery diário:
 
 ### 10.8 Critérios de Aceite
 
-| # | Critério | Validação |
-|---|---|---|
-| ✅ 1 | Stream RTSP capturado e processado em ≥ 10 FPS (RNF-04) | Medir FPS no log |
-| ✅ 2 | Pessoa detectada e alerta com foto chegando em < 10s | Entrar no campo da câmera, cronometrar |
-| ✅ 3 | Detecção fora da zona configurada é ignorada (RN-14) | Desenhar zona pequena, mover fora dela |
-| ✅ 4 | Câmera interna só detecta em modo ausente (RN-16) | Ativar câmera interna com alguém em casa |
-| ✅ 5 | Snapshots salvos no MinIO com URL no evento | Verificar MinIO UI |
-| ✅ 6 | Snapshots removidos após 90 dias (RN-15) | Verificar job agendado |
-| ✅ 7 | Marcação de falso positivo funciona via Telegram `/fp_` | Responder mensagem de alerta |
-| ✅ 8 | 3 falsos positivos seguidos disparam alerta de recalibração (RN-17) | Marcar 3 FP e verificar alerta |
-| ✅ 9 | Cobertura de testes ≥ 70% no vision-service | `pytest --cov` |
+| #    | Critério                                                            | Validação                                |
+| ---- | ------------------------------------------------------------------- | ---------------------------------------- |
+| ✅ 1 | Stream RTSP capturado e processado em ≥ 10 FPS (RNF-04)             | Medir FPS no log                         |
+| ✅ 2 | Pessoa detectada e alerta com foto chegando em < 10s                | Entrar no campo da câmera, cronometrar   |
+| ✅ 3 | Detecção fora da zona configurada é ignorada (RN-14)                | Desenhar zona pequena, mover fora dela   |
+| ✅ 4 | Câmera interna só detecta em modo ausente (RN-16)                   | Ativar câmera interna com alguém em casa |
+| ✅ 5 | Snapshots salvos no MinIO com URL no evento                         | Verificar MinIO UI                       |
+| ✅ 6 | Snapshots removidos após 90 dias (RN-15)                            | Verificar job agendado                   |
+| ✅ 7 | Marcação de falso positivo funciona via Telegram `/fp_`             | Responder mensagem de alerta             |
+| ✅ 8 | 3 falsos positivos seguidos disparam alerta de recalibração (RN-17) | Marcar 3 FP e verificar alerta           |
+| ✅ 9 | Cobertura de testes ≥ 70% no vision-service                         | `pytest --cov`                           |
 
 ---
 
@@ -1400,18 +1441,18 @@ Configurar job Celery diário:
 
 ## Resumo Geral das Entregas
 
-| # | Entrega | Fase | Sprint | Dias | Módulos |
-|---|---|---|---|---|---|
-| 01 | Setup do Repositório e Estrutura | 1 | 1 | 3–5 | Todos |
-| 02 | Infraestrutura Base com Docker | 1 | 1–2 | 5–7 | Todos |
-| 03 | Pipeline de Ingestão IoT | 1–2 | 2–3 | 7–10 | M-01, M-02, M-03 |
-| 04 | Energia — Coleta e Armazenamento | 2 | 3–4 | 5–7 | M-01 |
-| 05 | Energia — Modelo Preditivo e Alertas | 3 | 4–6 | 10–14 | M-01 |
-| 06 | Irrigação — Sensores e Automação | 2–3 | 5–7 | 8–10 | M-03 |
-| 07 | Servidor — Monitoramento e Alertas | 2–3 | 5–6 | 6–8 | M-05 |
-| 08 | Equipamentos — Detecção de Anomalia | 3 | 6–8 | 8–10 | M-02 |
-| 09 | Casa Inteligente — HA + LLM | 4 | 8–10 | 12–15 | M-04 |
-| 10 | Câmeras — Visão Computacional | 4 | 9–11 | 10–14 | M-06 |
+| #   | Entrega                              | Fase | Sprint | Dias  | Módulos          |
+| --- | ------------------------------------ | ---- | ------ | ----- | ---------------- |
+| 01  | Setup do Repositório e Estrutura     | 1    | 1      | 3–5   | Todos            |
+| 02  | Infraestrutura Base com Docker       | 1    | 1–2    | 5–7   | Todos            |
+| 03  | Pipeline de Ingestão IoT             | 1–2  | 2–3    | 7–10  | M-01, M-02, M-03 |
+| 04  | Energia — Coleta e Armazenamento     | 2    | 3–4    | 5–7   | M-01             |
+| 05  | Energia — Modelo Preditivo e Alertas | 3    | 4–6    | 10–14 | M-01             |
+| 06  | Irrigação — Sensores e Automação     | 2–3  | 5–7    | 8–10  | M-03             |
+| 07  | Servidor — Monitoramento e Alertas   | 2–3  | 5–6    | 6–8   | M-05             |
+| 08  | Equipamentos — Detecção de Anomalia  | 3    | 6–8    | 8–10  | M-02             |
+| 09  | Casa Inteligente — HA + LLM          | 4    | 8–10   | 12–15 | M-04             |
+| 10  | Câmeras — Visão Computacional        | 4    | 9–11   | 10–14 | M-06             |
 
 **Estimativa total:** 74–100 dias de desenvolvimento  
 **Paralelismo possível:** Entregas 06 e 07 podem rodar em paralelo com a 05 (equipes diferentes)
@@ -1428,7 +1469,7 @@ Configurar job Celery diário:
                 ├──► 07
                 │
                 └──► 08 (depende também de 05)
-                
+
 05 ──► 08
 02 ──► 09 (+ Ollama configurado)
 02 ──► 10

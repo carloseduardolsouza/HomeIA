@@ -10,30 +10,35 @@ A arquitetura combina microsservicos, infraestrutura observavel e componentes de
 Este repositorio concentra codigo, infraestrutura e documentacao para evolucao incremental por entregas.
 
 ## Pre-requisitos
+
 - Docker e Docker Compose
 - Python 3.11+
 - Node.js 20+
 - Git
 
 ## Instalacao Local
+
 1. Clone o repositorio.
 2. Copie `.env.example` para `.env` e preencha os valores necessarios.
 3. Instale hooks de desenvolvimento: `pip install pre-commit && pre-commit install`.
-4. Suba a stack local (quando a Entrega 02 estiver concluida): `docker compose -f infra/compose/docker-compose.dev.yml up -d`.
+4. Suba a stack local: `bash infra/scripts/setup.sh`.
 5. Rode verificacoes locais: `pre-commit run --all-files`.
 
 ## Modulos
-| Modulo | Descricao | Status |
-|---|---|---|
-| Gateway IoT | Ingestao e validacao de dados de sensores | ⏳ planejado |
-| Inference Engine | Predicao, anomalias e jobs de ML | ⏳ planejado |
-| Alert Service | Alertas e notificacoes (Telegram) | ⏳ planejado |
-| LLM Service | Orquestracao de agente com modelo local | ⏳ planejado |
-| Vision Service | Deteccao em cameras e eventos | ⏳ planejado |
-| Infraestrutura Base | Docker, observabilidade e mensageria | 🔄 em progresso |
+
+| Modulo              | Descricao                                 | Status          |
+| ------------------- | ----------------------------------------- | --------------- |
+| Gateway IoT         | Ingestao e validacao de dados de sensores | ⏳ planejado    |
+| Inference Engine    | Predicao, anomalias e jobs de ML          | ⏳ planejado    |
+| Alert Service       | Alertas e notificacoes (Telegram)         | ⏳ planejado    |
+| LLM Service         | Orquestracao de agente com modelo local   | ⏳ planejado    |
+| Vision Service      | Deteccao em cameras e eventos             | ⏳ planejado    |
+| Infraestrutura Base | Docker, observabilidade e mensageria      | 🔄 em progresso |
 
 ## Documentacao
+
 A documentacao completa esta em [`docs/`](docs/).
 
 ## Board de Tarefas
+
 Defina o board oficial do time aqui: `https://github.com/SEU_USUARIO/HomeIA/projects`.

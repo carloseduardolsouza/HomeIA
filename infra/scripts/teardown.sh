@@ -1,4 +1,8 @@
-﻿#!/usr/bin/env bash
+#!/usr/bin/env bash
 set -euo pipefail
 
-echo "Teardown inicial da infraestrutura (placeholder da Entrega 01)."
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+cd "$ROOT_DIR"
+
+docker compose -f infra/compose/docker-compose.dev.yml down
+
